@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Emmanuel Diaz | Portfolio</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <style>
+        body { font-family: "Montserrat", sans-serif; background-color: #f4f7f6; }
+        
+        .presentation-area {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 40px;
+            padding: 50px 20px;
+        }
+
+        .game-column { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+
+        .game-wrapper {
+            position: relative;
+            width: 640px;
+            height: 350px;
+        }
+
+        #cbg, #canvas {
+            position: absolute;
+            top: 0; left: 0;
+            border: 3px solid rgb(0, 0, 0);
+            border-radius: 15px;
+        }
+
+        #cbg { background-color: hwb(231 66% 18%); z-index: 1; }
+        #canvas { z-index: 2; cursor: pointer; }
+
+        .btn-reset {
+            background-color: hwb(231 66% 18%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+
+            transition: all 0.2 ease-in-out;
+
+            outline: none;
+
+            box-shadow: 0 4px hwb(231 66% 18%);
+        }
+
+         .btn-reset:hover {
+            background-color: hwb(231 66% 18%);
+            transform: scale(1.05);
+            animation: pulse 1.5s infinite;
+
+         }
+         /* 2. "Pressed" effect when you click */
+        .btn-reset:active {
+            background-color:hwb(231 66% 18%);
+            box-shadow: 0 2px hwb(231 66% 18%);
+            transform: translateY(2px); /* Moves button down slightly */
+        }
+
+        /* Animation Keyframes */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 153, 153, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 153, 153, 0); }
+        }
+
+        .character-box {
+            width: 16px; height: 32px;
+            background-image: url("images/character-sheet.png");
+            background-repeat: no-repeat;
+            transform: scale(4); 
+            transform-origin: bottom; 
+            image-rendering: pixelated;
+            margin-bottom: 70px; 
+        }
+
+        .character-box:hover { animation: walk 0.8s steps(7) infinite; }
+        @keyframes walk { from { background-position: 0px; } to { background-position: -112px; } }
+
+       
+    </style>
+</head>
+<body>
+
+    <header class="w3-container w3-center w3-padding-32">
+        <h1 class="w3-xxlarge w3-text-blue"><b>Emmanuel Diaz</b></h1>
+        <p class="w3-large">Software Developer</p>
+    </header>
+
+    <div class="presentation-area">
+        <div class="game-column">
+            <div class="game-wrapper">
+                <canvas id="cbg" width="640" height="350"></canvas>
+                <canvas id="canvas" width="640" height="350"></canvas>
+            </div>
+            <button class="btn-reset" onclick="initGame()">Restart Game</button>
+        </div>
+        <div class="character-box" title="Pop as many balls as you can before the time runs out!"></div>
+    </div>
+
+    <script>
+        var score = 0
+        var gOver = false;
+        var N = 15;
+        var pop = document.createElement("AUDIO");
+        pop.setAttribute("src", "pop.wav");
+
+        var canvas, ctx, balls, gOver, timeLeft, timerInterval, requestID;
+        var N = 15; // Original starting number
+        var minRadius = 15, maxRadius = 25;
+        var minVelocity = 1, maxVelocity = 2;
+
+        window.onload = function() {
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            canvas.addEventListener("mousedown", handleClick, false);
+            initGame();
+        };
+
+        function initGame() {
+            cancelAnimationFrame(requestID);
+            clearInterval(timerInterval);
+            
+            balls = [];
+            gOver = false;
+            timeLeft = 30;
+            
+            timerInterval = setInterval(function() {
+                timeLeft--;
+                if (timeLeft <= 0) gOver = true;
+            }, 1000);
+
+            for (var i = 0; i < N; i++) {
+                balls.push(new Ball(getX(), getY(), getRadius(), getXVel(), getYVel(), getColor()));
+            }
+            gameLoop();
+        }
+
+        class Ball {
+            constructor(x, y, radius, vX, vY, color) {
+                this.x = x; this.y = y; this.radius = radius;
+                this.vX = vX; this.vY = vY; this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.strokeStyle = "gray";
+                ctx.fillStyle = this.color;
+                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }
+            update() {
+                this.x += this.vX;
+                if (this.x <= this.radius || this.x >= 640 - this.radius) this.vX = -this.vX;
+                this.y += this.vY;
+                if (this.y <= this.radius || this.y >= 350 - this.radius) this.vY = -this.vY;
+            }
+        }
+
+       function gameLoop() {
+            // THE FIX: If the game is over, stop the loop entirely
+            if (gOver) {
+                gameOver(); 
+                return; // This stops requestAnimationFrame from being called again
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Reset UI text settings for the timer
+            ctx.textAlign = "left"; 
+            ctx.textBaseline = "top"; 
+            ctx.font = "bold 20px Montserrat";
+            ctx.fillStyle = "#333";
+            ctx.fillText("Time: " + timeLeft + "s", 25, 25); 
+            
+            for (var i = 0; i < balls.length; i++) {
+                balls[i].update();
+                balls[i].draw();
+            }
+            
+            requestID = requestAnimationFrame(gameLoop);
+        }
+
+        // Original Support Functions
+        function getRadius() { return Math.floor(minRadius + Math.random() * maxRadius); }
+        function getColor() { return '#' + Math.floor(Math.random()*16777215).toString(16); }
+        function getX() { return Math.floor(Math.random() * 590) + 25; }
+        function getY() { return Math.floor(Math.random() * 300) + 25; }
+        function getXVel() { return Math.floor(minVelocity + Math.random() * maxVelocity); }
+        function getYVel() { return Math.floor(minVelocity + Math.random() * maxVelocity); }
+
+        function handleClick(e) {
+            if (gOver) return;
+            var rect = canvas.getBoundingClientRect();
+            var mouseX = e.clientX - rect.left;
+            var mouseY = e.clientY - rect.top;
+
+            for (var i = balls.length - 1; i >= 0; i--) {
+                var dx = mouseX - balls[i].x;
+                var dy = mouseY - balls[i].y;
+                if (Math.sqrt(dx*dx + dy*dy) < balls[i].radius) {
+                    try { pop.play(); } catch(err) {}
+                    balls.splice(i, 1);
+                    score++;
+                    if (balls.length <= 0){
+                     gOver = true;
+                    }
+                }
+            }
+        }
+
+        function gameOver() {
+            // 1. Clear the timer interval so it stops counting
+            clearInterval(timerInterval);
+            
+            // 2. Clear the screen one last time
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 3. Set text to CENTER
+            ctx.textAlign = "center"; 
+            ctx.textBaseline = "middle"; 
+            
+            // 4. Draw "GAME OVER" in the dynamic center
+            ctx.font = "bold 40px Montserrat";
+            ctx.fillStyle = "#009999";
+            ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 30);
+            
+            // 5. Draw the Score
+            ctx.font = "24px Montserrat";
+            ctx.fillStyle = "#f00";
+            ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2 + 20);
+        }
+    </script>
+</body>
+</html>
