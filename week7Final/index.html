@@ -6,7 +6,42 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <style>
-        body { font-family: "Montserrat", sans-serif; background-color: #f4f7f6; }
+        body {
+  background-color: #111111;
+  margin: 0;
+  overflow-x: clip;
+}
+
+.bg {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  width: 200%;
+  height: 200vh;
+  background: transparent url('http://assets.iceable.com/img/noise-transparent.png') repeat 0 0;
+  background-repeat: repeat;
+  animation: bg-animation .2s infinite;
+  opacity: .9;
+  visibility: visible;
+  z-index: -1;
+}
+
+@keyframes bg-animation {
+    0% { transform: translate(0,0) }
+    10% { transform: translate(-5%,-5%) }
+    20% { transform: translate(-10%,5%) }
+    30% { transform: translate(5%,-10%) }
+    40% { transform: translate(-5%,15%) }
+    50% { transform: translate(-10%,5%) }
+    60% { transform: translate(15%,0) }
+    70% { transform: translate(0,10%) }
+    80% { transform: translate(-15%,0) }
+    90% { transform: translate(10%,5%) }
+    100% { transform: translate(5%,0) }
+}
+
         
         .presentation-area {
             display: flex;
@@ -34,42 +69,43 @@
         #cbg { background-color: hwb(231 66% 18%); z-index: 1; }
         #canvas { z-index: 2; cursor: pointer; }
 
-        .btn-reset {
-            background-color: hwb(231 66% 18%);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+       .btn-reset {
+    background-color: hwb(231 66% 18%);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    outline: none;
+   
+    box-shadow: 0 4px hwb(231 66% 18%); 
 
-            transition: all 0.2 ease-in-out;
+    transition: transform 0.2s, background-color 0.2s; 
+}
 
-            outline: none;
+.btn-reset:hover {
+    background-color: white; 
+    color: #12003b; 
+    transform: scale(1.05);
+    
+    animation: pulse 1.5s infinite;
+}
 
-            box-shadow: 0 4px hwb(231 66% 18%);
-        }
 
-         .btn-reset:hover {
-            background-color: hwb(231 66% 18%);
-            transform: scale(1.05);
-            animation: pulse 1.5s infinite;
-
-         }
-         /* 2. "Pressed" effect when you click */
-        .btn-reset:active {
-            background-color:hwb(231 66% 18%);
-            box-shadow: 0 2px hwb(231 66% 18%);
-            transform: translateY(2px); /* Moves button down slightly */
-        }
-
-        /* Animation Keyframes */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 153, 153, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 153, 153, 0); }
-        }
-
+@keyframes pulse {
+    0% {
+     
+        box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); 
+    }
+    70% {
+       
+        box-shadow: 0 0 0 15px rgba(0, 255, 255, 0); 
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 255, 0);
+    }
+}
         .character-box {
             width: 16px; height: 32px;
             background-image: url("images/character-sheet.png");
@@ -83,159 +119,844 @@
         .character-box:hover { animation: walk 0.8s steps(7) infinite; }
         @keyframes walk { from { background-position: 0px; } to { background-position: -112px; } }
 
+        .navbar {
+            background-color: #000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            padding: 5px 10px;
+                        
+            position: fixed; 
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            z-index: 9999;
+            display: flex; 
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 0;
+            padding: 10px;
+        }
+
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.8); 
+            color: #000 !important; 
+            border-radius: 30px;
+        }
+
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #888;
+            padding: 8px 20px;
+            transition: background-color 0.3s ease, color 0.3s ease; 
+            border-radius: 30px;
+        }
+
+        .nav-links a.active {
+            background-color: #fff;
+            color: #000;
+            border-radius: 30px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+
+            scroll-padding-top: 100px;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 100vh;
+
+            position: sticky;
+            top:0;
+
+            box-shadow: 0px -10px 20px rgba(0,0,0,0.5);
+            text-align: center;
+            padding: 80px 20px;
+            box-sizing: border-box;
+        }
+
+      
+        .section-content {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        section p {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+               
+        .hero-section {
+            display: flex;
+            flex-direction: row; 
+            align-items: center;
+            justify-content: space-between;
+
+
+            min-height: 100vh;
+            padding: 0 10%; 
+            max-width: 1400px;
+            margin: 0 auto; 
+            gap: 50px;
+        }
+
+      
+        .hero-text {
+            flex: 1; 
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .highlight-text {
+            color: #a78bfa; 
+        }
+
+        
+        .typing-container {
+            display: inline-block;
+        }
+
+        .typing-text {
+            font-size: 1.8rem;
+            color: #ccc;
+            font-family: 'Courier New', monospace; 
+            overflow: hidden; 
+            border-right: .15em solid orange; 
+            white-space: nowrap; 
+            margin: 0;
+            width: 0; 
+            animation: 
+                typing 3.5s steps(30, end) forwards, 
+                blink-caret .75s step-end infinite;
+        }
+
+        /* The typing keyframes */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* The cursor blink keyframes */
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: orange; }
+        }
+
+        .hero-bio {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin: 20px 0 40px 0;
+            line-height: 1.6;
+        }
+
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px; 
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            min-width: fit-content;
+        }
+
+        .btn-blue {
+            border-color: #3b82f6;
+            color: white;
+            background: transparent;
+        }
+        .btn-blue:hover {
+            background-color: #3b82f6;
+            box-shadow: 0 0 15px #3b82f6;
+        }
+
+        .btn-orange {
+            border-color: #f97316;
+            color: white;
+            background: transparent;
+        }
+        .btn-orange:hover {
+            background-color: #f97316;
+            box-shadow: 0 0 15px #f97316;
+        }
+
        
+        .hero-image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 4px solid #a78bfa; 
+            box-shadow: 0 0 25px rgba(167, 139, 250, 0.4); 
+        }
+
+        
+        @media (max-width: 900px) {
+            .hero-section {
+                flex-direction: column-reverse; 
+                text-align: center;
+                padding-top: 120px;
+            }
+            
+            
+            .profile-pic {
+                width: 250px;
+                height: 250px;
+                margin-bottom: 30px;
+            }
+        }
+        .hero-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: flex-start;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+.rocket-box {
+    width: 16px;  
+    height: 32px;  
+    
+   
+    background-image: url("images/rocket-sheet.png"); 
+    background-repeat: no-repeat;
+    
+ 
+    transform: scale(4); 
+    image-rendering: pixelated; 
+    
+ 
+    margin-bottom: 60px; 
+    margin-right: 10px;  
+
+    animation: 
+        blastoff 0.5s steps(5) infinite,
+        flightCycle 45s ease-in-out infinite;
+}
+
+/* for the Rocket*/
+@keyframes blastoff {
+    from { background-position: 0px; }
+    to { background-position: -80px; } 
+}
+
+
+@keyframes flightCycle {
+   
+    0%   { transform: scale(4) translateY(0px); }
+    5%   { transform: scale(4) translateY(-40px); } 
+    10%  { transform: scale(4) translateY(0px); }
+    15%  { transform: scale(4) translateY(-20px); } 
+    20%  { transform: scale(4) translateY(0px); }
+    22%  { transform: scale(4) translateY(0px); }   
+    
+    25%  { transform: scale(4) translateY(-685px); } 
+
+    
+    90%  { transform: scale(4) translateY(-800px); } 
+ 
+    100% { transform: scale(4) translateY(0px); }   
+}
+
+@media (max-width: 480px) {
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 80%;
+        text-align: center;
+    }
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 5px; 
+}
+
+
+img {
+  border-radius: 5px 5px 0 0;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.project-card {
+    background-color: #1a1a1a; 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden; 
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-10px); 
+    border-color: #a78bfa; 
+}
+
+
+.project-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; 
+    border-bottom: 2px solid #a78bfa;
+}
+
+
+.project-info {
+    padding: 20px;
+    text-align: left;
+}
+
+.project-info h3 {
+    color: #fff;
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+.project-info p {
+    color: #aaa;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.education-container {
+    max-width: 800px;
+    margin: 40px auto;
+    position: relative;
+    padding-left: 30px;
+    border-left: 2px solid rgba(167, 139, 250, 0.3); 
+}
+
+.education-card {
+    position: relative;
+    margin-bottom: 40px;
+    padding: 25px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: 0.3s;
+}
+
+.education-card:hover {
+    border-color: #a78bfa;
+    transform: translateX(10px);
+}
+
+.education-dot {
+    position: absolute;
+    left: -41px;
+    top: 30px;
+    width: 20px;
+    height: 20px;
+    background: #a78bfa;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #a78bfa;
+}
+
+.education-date {
+    display: inline-block;
+    color: #a78bfa;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.education-content h3 {
+    margin: 0 0 5px 0;
+    color: #fff;
+    font-size: 1.6rem;
+}
+
+.school-name {
+    color: #ccc;
+    font-style: italic;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.education-content p {
+    color: #aaa;
+    line-height: 1.6;
+    margin: 0;
+    font-size: 1rem;
+    text-align: left;
+}
+
+@media (max-width: 600px) {
+    .education-container {
+        margin-left: 20px;
+    }
+    .education-content h3 {
+        font-size: 1.3rem;
+    }
+}
+       
+        #home     { background-color: #111111; }
+        #projects { min-height: auto; background-color: #1a1a1a; }
+        #skills   { background-color: #222222; }
+        #education{ background-color: #1a1a1a; }
+        #about    { background-color: #111111; }
+        #contact  { background-color: #000000; }
+
+    
+
+        #myBtn {
+    display: none; 
+    position: fixed; 
+    bottom: 30px; 
+    right: 30px; /* Anchors it to the right */
+    
+    /* Centers the word "Top" perfectly in the circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 10000; 
+    border: none; 
+    outline: none; 
+    background-color: #a78bfa; 
+    color: white; 
+    cursor: pointer; 
+    padding: 0; 
+    border-radius: 50%; 
+    font-size: 18px; 
+    font-weight: bold;
+    width: 60px; /* Perfect circle */
+    height: 60px; /* Perfect circle */
+    box-shadow: 0 0 15px rgba(167, 139, 250, 0.4);
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+#myBtn:hover {
+    background-color: rgb(71, 5, 194);
+    transform: scale(1.1); /* Clean pop effect, no weird sliding */
+}
+
+@media (max-width: 900px) {
+    #myBtn {
+        right: 20px;
+        bottom: 20px;
+    }
+}
     </style>
 </head>
 <body>
+    <div class="bg"></div>
 
-    <header class="w3-container w3-center w3-padding-32">
-        <h1 class="w3-xxlarge w3-text-blue"><b>Emmanuel Diaz</b></h1>
-        <p class="w3-large">Software Developer</p>
-    </header>
+  <nav class="navbar">
+    <ul class="nav-links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-    <div class="presentation-area">
-        <div class="game-column">
-            <div class="game-wrapper">
-                <canvas id="cbg" width="640" height="350"></canvas>
-                <canvas id="canvas" width="640" height="350"></canvas>
-            </div>
-            <button class="btn-reset" onclick="initGame()">Restart Game</button>
+    <section id="home" class="hero-section">
+    <div class="hero-text">
+        <h1 class="hero-title">
+            <span class="highlight-text">Emmanuel Diaz</span>
+        </h1>
+
+        <div class="typing-container">
+            <h2 class="typing-text">Aspiring Software Developer</h2>
         </div>
-        <div class="character-box" title="Pop as many balls as you can before the time runs out!"></div>
+
+        <p class="hero-bio">
+            | Information Systems & Programming Student | Strong Problem-Solving & Team Skills
+        </p>
+        
+        <div class="hero-buttons">
+            <a href="#contact" class="btn btn-blue">Get In Touch</a>
+            
+            <a href="#projects" class="btn btn-orange">View My Work</a>
+
+            <a href="ResumeDiazEmmanuel.pdf" class="btn btn-blue" target="_blank">Resume</a>
+            
+        </div>
+    </div> <div class="hero-image-container">
+        <img src="https://media.licdn.com/dms/image/v2/D5603AQFPCa6vLIyZRQ/profile-displayphoto-scale_200_200/B56Zn5mZ_nJ4AY-/0/1760829220279?e=1772668800&v=beta&t=Qs83oKbyor9LeJysp8_osqUn9NFyFH3oYeQGp3Ngn6Q" alt="Emmanuel Diaz" class="profile-pic">
     </div>
+</section>
+    
+        <section id="about">
+            <div class="section-content">
+                <h2>About Me</h2>
+                <p>"I’m a Computer Information Systems student at DeVry University with a deep interest in software development and cybersecurity. Whether I’m configuring network firewalls or animating pixel art in Aseprite for my latest Godot project, I love the challenge of turning a complex idea into a functional reality. My goal is to leverage my skills in Java, Python, and C# to build secure and innovative software solutions."</p>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="section-content">
+                <h2>Projects</h2>
+                
+                <div class="presentation-area">
+                    <div class="rocket-box" title="Blast off!"></div>
+                    <div class="game-column">
+                        <div class="game-wrapper">
+                            <canvas id="cbg" width="640" height="350"></canvas>
+                            <canvas id="canvas" width="640" height="350"></canvas>
+                        </div>
+                        <button class="btn-reset" onclick="initGame()">Restart Game</button>
+                    </div>
+                    <div class="character-box" title="Pop as many balls as you can before the time runs out!"></div>
+                </div>
+        
+                <div class="project-grid">
+                    <div class="project-card">
+                        <img src="images/IAFlogin.png" alt="Irrigation Automated Flow" class="project-img">
+                        <div class="project-info">
+                            <h3>Irrigation Automated Flow</h3>
+                            <p>A Flutter application for irrigation business management, integrated with Firebase.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <img src="images/gamedev.png" alt="Game Development" class="project-img">
+                        <div class="project-info">
+                            <h3>Game Development</h3>
+                            <p>A 2D top-down game developed in Godot featuring pixel art and narrative storytelling.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="section-content">
+                <h2>Skills</h2>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
+                    <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" height="28" alt="Python" />
+                    <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" height="28" alt="Java" />
+                    <img src="https://img.shields.io/badge/Apache%20NetBeans-1B6AC6?style=for-the-badge&logo=apache-netbeans&logoColor=white" height="28" alt="NetBeans" />
+                    <img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white" height="28" alt="C#" />
+                    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" height="28" alt="JavaScript" />
+                    <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" height="28" alt="HTML5" />
+                    <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" height="28" alt="CSS3" />
+                    <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" height="28" alt="MySQL" />
+                    <img src="https://img.shields.io/badge/Godot_Engine-478CBF?style=for-the-badge&logo=godot-engine&logoColor=white" height="28" alt="Godot" />
+                    <img src="https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white" height="28" alt="Unity" />
+                    <img src="https://img.shields.io/badge/Aseprite-FFFFFF?style=for-the-badge&logo=Aseprite&logoColor=#7D929E" height="28" alt="Aseprite" />
+                    <img src="https://img.shields.io/badge/Wireshark-1679A7?style=for-the-badge&logo=wireshark&logoColor=white" height="28" alt="Wireshark" />  
+                    <img src="https://img.shields.io/badge/Packet_Tracer-1D6A9A?style=for-the-badge&logo=Cisco&logoColor=white" height="28" alt="Packet Tracer" />
+                    <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" height="28" alt="Git" />
+                    <img src="https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white" height="28" alt="Bash" />
+                </div>
+            </div>
+        </section>
+
+        <section id="education">
+            <div class="section-content">
+                <h2>Education</h2>
+                
+                <div class="education-container">
+                    <div class="education-card">
+                        <div class="education-dot"></div>
+                        <div class="education-content">
+                            <span class="education-date">(Feb 2024 - Sep 2025) </span>
+                            <h3>Associate of Applied Science in I.T and Networking <br>Information Systems & Programming Specialization</h3>
+                            <p class="school-name"> DeVry University</p>
+                            <p>Focusing on software development, database management, and network security. Active in building projects using Java, C#, and Python.</p>
+                        </div>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="education-dot"></div>
+                        <div class="education-content">
+                            <span class="education-date">Ongoing</span>
+                            <h3>Certificates and Recognition</h3>
+                            <p class="school-name"></p>
+                            <p> Undergraduate Certificate in Programming Essentials with Honors<br>
+                            Dean's List (2024 - 2025) - 4.0 GPA<br>
+                            Member, National Society of Leadership and Success<br> 
+                            IEEE Member<br>
+                            Telstra AU - Cybersecurity Job Simulation<br>
+                            Responding to a malware attack<br>
+                            Analysing the attack<br>
+                            (Technical) Mitigate the malware attack<br>
+                            Incident Postmortem
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="education-container">
+                    <div class="education-card">
+                        <div class="education-dot"></div>
+                        <div class="education-content">
+                            <span class="education-date"> (Anticipated completion date Nov 2026) </span>
+                            <h3>Bachelor of Science in Computer Information Systems </h3>
+                            <p class="school-name">DeVry University</p>
+                            <p>Focusing on software development, database management, and network security. Active in building projects using Java, C#, and Flutter.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+            
+        <section id="contact">
+            <div class="section-content">
+                <h2>Get In Touch</h2>
+                <div style="max-width: 600px; width: 100%;">
+                    <a href="mailto:emmanueldiaz24@gmail.com" class="btn btn-blue" style="margin-top: 20px; display: inline-block;">
+                        Email Me
+                    </a>
+                    
+                    <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center;">
+                        <a href="https://linkedin.com/in/ediazpydev" style="color: white; font-size: 1.2rem; text-decoration: none;">LinkedIn</a>
+                        <a href="https://github.com/ediazpy" style="color: white; font-size: 1.2rem; text-decoration: none;">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    
 
     <script>
-        var score = 0
-        var gOver = false;
-        var N = 15;
-        var pop = document.createElement("AUDIO");
-        pop.setAttribute("src", "pop.wav");
 
-        var canvas, ctx, balls, gOver, timeLeft, timerInterval, requestID;
-        var N = 15; // Original starting number
-        var minRadius = 15, maxRadius = 25;
-        var minVelocity = 1, maxVelocity = 2;
+    var canvas, ctx, balls, gOver, timeLeft, timerInterval, requestID;
+    var score = 0;
+    var N = 15;
+    var minRadius = 15, maxRadius = 25;
+    var minVelocity = 1, maxVelocity = 2;
+    var pop = document.createElement("AUDIO");
+    pop.setAttribute("src", "pop.wav");
 
-        window.onload = function() {
-            canvas = document.getElementById('canvas');
-            ctx = canvas.getContext('2d');
-            canvas.addEventListener("mousedown", handleClick, false);
-            initGame();
-        };
 
-        function initGame() {
-            cancelAnimationFrame(requestID);
-            clearInterval(timerInterval);
-            
-            balls = [];
-            gOver = false;
-            timeLeft = 30;
-            
-            timerInterval = setInterval(function() {
-                timeLeft--;
-                if (timeLeft <= 0) gOver = true;
-            }, 1000);
+    document.addEventListener("DOMContentLoaded", function () {
+    const mybutton = document.getElementById("myBtn"); // One definition is enough
+    const navLinks = document.querySelectorAll(".nav-links a");
+    const sections = document.querySelectorAll("section");
 
-            for (var i = 0; i < N; i++) {
-                balls.push(new Ball(getX(), getY(), getRadius(), getXVel(), getYVel(), getColor()));
-            }
-            gameLoop();
-        }
+    function handleScroll() {
+        let current = "";
+        const scrollPosition = window.pageYOffset + 200; 
 
-        class Ball {
-            constructor(x, y, radius, vX, vY, color) {
-                this.x = x; this.y = y; this.radius = radius;
-                this.vX = vX; this.vY = vY; this.color = color;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.strokeStyle = "gray";
-                ctx.fillStyle = this.color;
-                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.stroke();
-            }
-            update() {
-                this.x += this.vX;
-                if (this.x <= this.radius || this.x >= 640 - this.radius) this.vX = -this.vX;
-                this.y += this.vY;
-                if (this.y <= this.radius || this.y >= 350 - this.radius) this.vY = -this.vY;
+        // Button Visibility Logic
+        if (mybutton) {
+            if (window.pageYOffset > 400) {
+                mybutton.style.display = "flex"; // Use flex to keep text centered
+            } else {
+                mybutton.style.display = "none";
             }
         }
 
-       function gameLoop() {
-            // THE FIX: If the game is over, stop the loop entirely
-            if (gOver) {
-                gameOver(); 
-                return; // This stops requestAnimationFrame from being called again
+        // Section Highlighting Logic
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                current = section.getAttribute("id");
             }
+        });
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Reset UI text settings for the timer
-            ctx.textAlign = "left"; 
-            ctx.textBaseline = "top"; 
-            ctx.font = "bold 20px Montserrat";
-            ctx.fillStyle = "#333";
-            ctx.fillText("Time: " + timeLeft + "s", 25, 25); 
-            
-            for (var i = 0; i < balls.length; i++) {
-                balls[i].update();
-                balls[i].draw();
+        navLinks.forEach((link) => {
+            link.classList.remove("active");
+            if (current && link.getAttribute("href").includes(current)) {
+                link.classList.add("active");
             }
-            
-            requestID = requestAnimationFrame(gameLoop);
+        });
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    
+    // ... rest of your game init code ...
+
+
+      
+        canvas = document.getElementById('canvas');
+        ctx = canvas.getContext('2d');
+        canvas.addEventListener("mousedown", handleClick, false);
+        
+       
+        initGame(); 
+    });
+
+    // 3. Game Functions
+    function initGame() {
+       
+        if(requestID) cancelAnimationFrame(requestID);
+        clearInterval(timerInterval);
+        
+        balls = [];
+        gOver = false;
+        score = 0; 
+        timeLeft = 30;
+        
+        timerInterval = setInterval(function() {
+            timeLeft--;
+            if (timeLeft <= 0) gOver = true;
+        }, 1000);
+
+        for (var i = 0; i < N; i++) {
+            balls.push(new Ball(getX(), getY(), getRadius(), getXVel(), getYVel(), getColor()));
         }
+        gameLoop();
+    }
 
-        // Original Support Functions
-        function getRadius() { return Math.floor(minRadius + Math.random() * maxRadius); }
-        function getColor() { return '#' + Math.floor(Math.random()*16777215).toString(16); }
-        function getX() { return Math.floor(Math.random() * 590) + 25; }
-        function getY() { return Math.floor(Math.random() * 300) + 25; }
-        function getXVel() { return Math.floor(minVelocity + Math.random() * maxVelocity); }
-        function getYVel() { return Math.floor(minVelocity + Math.random() * maxVelocity); }
+    class Ball {
+        constructor(x, y, radius, vX, vY, color) {
+            this.x = x; this.y = y; this.radius = radius;
+            this.vX = vX; this.vY = vY; this.color = color;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.strokeStyle = "gray";
+            ctx.fillStyle = this.color;
+            ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        }
+        update() {
+            this.x += this.vX;
+            if (this.x <= this.radius || this.x >= 640 - this.radius) this.vX = -this.vX;
+            this.y += this.vY;
+            if (this.y <= this.radius || this.y >= 350 - this.radius) this.vY = -this.vY;
+        }
+    }
 
-        function handleClick(e) {
-            if (gOver) return;
-            var rect = canvas.getBoundingClientRect();
-            var mouseX = e.clientX - rect.left;
-            var mouseY = e.clientY - rect.top;
+    function gameLoop() {
+        if (gOver) {
+            gameOver(); 
+            return;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw Timer
+        ctx.textAlign = "left"; 
+        ctx.textBaseline = "top"; 
+        ctx.font = "bold 20px Montserrat";
+        ctx.fillStyle = "#333";
+        ctx.fillText("Time: " + timeLeft + "s", 25, 25); 
+        
+        // Draw Balls
+        for (var i = 0; i < balls.length; i++) {
+            balls[i].update();
+            balls[i].draw();
+        }
+        requestID = requestAnimationFrame(gameLoop);
+    }
 
-            for (var i = balls.length - 1; i >= 0; i--) {
-                var dx = mouseX - balls[i].x;
-                var dy = mouseY - balls[i].y;
-                if (Math.sqrt(dx*dx + dy*dy) < balls[i].radius) {
-                    try { pop.play(); } catch(err) {}
-                    balls.splice(i, 1);
-                    score++;
-                    if (balls.length <= 0){
-                     gOver = true;
-                    }
-                }
+    function handleClick(e) {
+        if (gOver) return;
+        var rect = canvas.getBoundingClientRect();
+        var mouseX = e.clientX - rect.left;
+        var mouseY = e.clientY - rect.top;
+
+        for (var i = balls.length - 1; i >= 0; i--) {
+            var dx = mouseX - balls[i].x;
+            var dy = mouseY - balls[i].y;
+            if (Math.sqrt(dx*dx + dy*dy) < balls[i].radius) {
+                try { pop.play(); } catch(err) {}
+                balls.splice(i, 1);
+                score++;
+                if (balls.length <= 0) gOver = true;
             }
         }
+    }
 
-        function gameOver() {
-            // 1. Clear the timer interval so it stops counting
-            clearInterval(timerInterval);
-            
-            // 2. Clear the screen one last time
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 3. Set text to CENTER
-            ctx.textAlign = "center"; 
-            ctx.textBaseline = "middle"; 
-            
-            // 4. Draw "GAME OVER" in the dynamic center
-            ctx.font = "bold 40px Montserrat";
-            ctx.fillStyle = "#009999";
-            ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 30);
-            
-            // 5. Draw the Score
-            ctx.font = "24px Montserrat";
-            ctx.fillStyle = "#f00";
-            ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2 + 20);
-        }
-    </script>
+    function gameOver() {
+        clearInterval(timerInterval);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.textAlign = "center"; 
+        ctx.textBaseline = "middle"; 
+        ctx.font = "bold 40px Montserrat";
+        ctx.fillStyle = "#009999";
+        ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 30);
+        ctx.font = "24px Montserrat";
+        ctx.fillStyle = "#f00";
+        ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2 + 20);
+    }
+    
+    // Helper Functions
+    function getRadius() { return Math.floor(minRadius + Math.random() * maxRadius); }
+    function getColor() { return '#' + Math.floor(Math.random()*16777215).toString(16); }
+    function getX() { return Math.floor(Math.random() * 590) + 25; }
+    function getY() { return Math.floor(Math.random() * 300) + 25; }
+    function getXVel() { return Math.floor(minVelocity + Math.random() * maxVelocity); }
+    function getYVel() { return Math.floor(minVelocity + Math.random() * maxVelocity); }
+
+
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}  
+</script>
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
 </body>
 </html>
